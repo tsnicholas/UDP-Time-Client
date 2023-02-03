@@ -1,7 +1,12 @@
 package cs416;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.SocketException;
+import java.net.InetAddress;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 public class TimeClientUDP {
     private static final int PORT_NUM = 37;
@@ -17,7 +22,10 @@ public class TimeClientUDP {
         try {
             TimeClientUDP client = new TimeClientUDP();
             byte[] receivedData = client.queryTime();
-            System.out.println(new String(receivedData));
+            long seconds_since_beginning_of_1900 = Integer.toUnsignedLong(ByteBuffer.wrap(receivedData).getInt());
+            System.out.println(seconds_since_beginning_of_1900);
+            DataConverter dataConverter = new DataConverter();
+            System.out.println(dataConverter.getTime(seconds_since_beginning_of_1900));
         }
         catch(IOException error) {
             error.printStackTrace();
@@ -25,10 +33,11 @@ public class TimeClientUDP {
     }
 
     private byte[] queryTime() throws IOException {
-        DatagramPacket timeRequest = new DatagramPacket(new byte[1024], 1024, serverIP, PORT_NUM);
-        socket.send(timeRequest);
+        DatagramPacket request = new DatagramPacket(new byte[1024], 1024, serverIP, PORT_NUM);
+        socket.send(request);
         DatagramPacket reply = new DatagramPacket(new byte[1024], 1024);
         socket.receive(reply);
+        socket.close();
         return reply.getData();
     }
 }
