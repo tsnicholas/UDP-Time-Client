@@ -27,23 +27,21 @@ public class DataConverter {
     }
 
     private void addDataToCalendar(long data) {
-        // Add the number of years since the beginning of 1900.
-        double years = data * 0.00000003171;
-        calendar.add(Calendar.YEAR, (int)years);
-        // Add the number of days since the beginning of this year.
-        double days = extractRemainder(years) * 365;
+        // Add the number of days since the beginning of 1900.
+        double days = data / 86400.0;
         calendar.add(Calendar.DAY_OF_YEAR, (int)days);
+        System.out.println(calendar.getTime());
         // Add the remaining hours since 1/1/1900.
         double hours = extractRemainder(days) * 24;
         calendar.add(Calendar.HOUR, (int)hours);
+        System.out.println(calendar.getTime());
         // Add the remaining minutes since 1/1/1900.
         double minutes = extractRemainder(hours) * 60;
         calendar.add(Calendar.MINUTE, (int)minutes);
+        System.out.println(calendar.getTime());
     }
 
     private double extractRemainder(double value) {
-        double remainder = value - (int)value;
-        System.out.println((int)value + " : " + remainder);
-        return remainder;
+        return value - (int)value;
     }
 }
