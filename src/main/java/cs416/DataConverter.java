@@ -27,20 +27,31 @@ public class DataConverter {
     }
 
     private void addDataToCalendar(long data) {
-        // Add the number of days since the beginning of 1900.
-        double days = data / 86400.0;
-        calendar.add(Calendar.DAY_OF_YEAR, (int)days);
-        System.out.println(calendar.getTime());
-        // Add the remaining hours since 1/1/1900.
-        double hours = extractRemainder(days) * 24;
-        calendar.add(Calendar.HOUR, (int)hours);
-        System.out.println(calendar.getTime());
-        // Add the remaining minutes since 1/1/1900.
-        double minutes = extractRemainder(hours) * 60;
-        calendar.add(Calendar.MINUTE, (int)minutes);
-        System.out.println(calendar.getTime());
+        // Subtract the data by 5 hours to account for EST.
+        long timeZoneConversion = data - 18000;
+        double days_remainder = addNumOfDays(timeZoneConversion);
+        double hours_remainder = addNumOfHours(days_remainder);
+        addNumOfMinutes(hours_remainder);
     }
 
+    private double addNumOfDays(long timeZoneConversion) {
+        double days = timeZoneConversion / 86400.0; // number of days since 1/1/1900.
+        calendar.add(Calendar.DATE, (int)days);
+        return extractRemainder(days);
+    }
+
+    private double addNumOfHours(double remainder) {
+        double hours = remainder * 24; // number of remaining hours.
+        calendar.add(Calendar.HOUR, (int)hours);
+        return extractRemainder(hours);
+    }
+
+    private void addNumOfMinutes(double remainder) {
+        double minutes = remainder * 60; // number of remaining minutes.
+        calendar.add(Calendar.MINUTE, (int)minutes);
+    }
+
+    // Return the numbers after the decimal only.
     private double extractRemainder(double value) {
         return value - (int)value;
     }

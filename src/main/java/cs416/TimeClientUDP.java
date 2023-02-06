@@ -23,7 +23,6 @@ public class TimeClientUDP {
             TimeClientUDP client = new TimeClientUDP();
             byte[] receivedData = client.queryTime();
             long seconds_since_beginning_of_1900 = Integer.toUnsignedLong(ByteBuffer.wrap(receivedData).getInt());
-            System.out.println(seconds_since_beginning_of_1900);
             DataConverter dataConverter = new DataConverter();
             System.out.println(dataConverter.getTime(seconds_since_beginning_of_1900));
         }
