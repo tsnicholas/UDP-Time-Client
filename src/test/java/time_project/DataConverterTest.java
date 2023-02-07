@@ -1,4 +1,4 @@
-package cs416;
+package time_project;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

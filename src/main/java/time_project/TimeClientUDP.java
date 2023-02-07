@@ -1,4 +1,4 @@
-package cs416;
+package time_project;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -22,9 +22,10 @@ public class TimeClientUDP {
         try {
             TimeClientUDP client = new TimeClientUDP();
             byte[] receivedData = client.queryTime();
-            long seconds_since_beginning_of_1900 = Integer.toUnsignedLong(ByteBuffer.wrap(receivedData).getInt());
+            // Seconds since the very beginning of 1900 given by the server.
+            long seconds_since = Integer.toUnsignedLong(ByteBuffer.wrap(receivedData).getInt());
             DataConverter dataConverter = new DataConverter();
-            System.out.println(dataConverter.getTime(seconds_since_beginning_of_1900));
+            System.out.println(dataConverter.getTime(seconds_since));
         }
         catch(IOException error) {
             error.printStackTrace();
